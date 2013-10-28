@@ -5,8 +5,8 @@ import QtQuick.Layouts 1.0
 import QtMultimedia 5.0
 import QtQuick.Window 2.0
 
-ApplicationWindow {
-    title: qsTr("CarPc")
+Rectangle {
+    //title: qsTr("CarPc")
     width: 800
     height: 480
 
@@ -89,7 +89,7 @@ ApplicationWindow {
         tooltip: "Shuffle music"
     }
 
-    toolBar: ToolBar {
+    ToolBar {
         id: toolbar
         RowLayout {
             id: toolbarLayout
@@ -109,27 +109,6 @@ ApplicationWindow {
                 value: 0.5
                 width: 100
             }
-        }
-    }
-
-    menuBar: MenuBar {
-        Menu {
-            title: "&File"
-            MenuItem { action: openAction }
-            MenuItem {
-                text: "Close"
-                shortcut: "Ctrl+Q"
-                onTriggered: Qt.quit()
-            }
-        }
-        Menu {
-            title: "&Controls"
-            MenuItem { action: playAction }
-            MenuItem { action: pauseAction }
-            MenuItem { action: forwardAction }
-            MenuItem { action: backwardAction }
-            MenuItem { action: repeatAction }
-            MenuItem { action: shuffleAction }
         }
     }
 }
