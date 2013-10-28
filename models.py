@@ -1,33 +1,48 @@
 #from PySide import QtCore
-from PyQt4 import QtCore
+from PyQt5 import QtCore
 
 
 class MusicModel(QtCore.QAbstractListModel):
 
-    COLUMNS = ('music',)
+    PathRole = QtCore.Qt.UserRole + 1
+    NameRole = QtCore.Qt.UserRole + 2
+
+    _roles = {PathRole: 'path', NameRole: "name"}
 
     def __init__(self, parent):
         QtCore.QAbstractListModel.__init__(self, parent=parent)
-        self.__music = []
-        self.setRoleNames(dict(enumerate(MusicModel.COLUMNS)))
+        self._music = []
 
     def rowCount(self, parent=QtCore.QModelIndex()):
-        return len(self.__music)
+        return len(self._music)
 
-    def data(self, index, role):
-        if index.isValid() and role == MusicModel.COLUMNS.index('music'):
-            return self.__music[index.row()]
-        return None
+    def data(self, index, role=QtCore.Qt.DisplayRole):
+        try:
+            music = self._musics[index.row()]
+        except IndexError:
+            return QVariant()
+
+        if role == self.PathRole:
+            return music.pach
+
+        if role == self.NameRole:
+            return music.name
+
+        return QVariant()
+
+    def roleNames(self):
+        return self._roles
+
 
     def add(self, musicDetails):
-        self.beginInsertRows(QtCore.QModelIndex(), len(self.__music),
-                             len(self.__music))
-        self.__users.append(musicDetails)
+        self.beginInsertRows(QtCore.QModelIndex(), len(self._music),
+                             len(self._music))
+        self._music.append(musicDetails)
         self.endInsertRows()
 
     def delete(self, musicName, row):
         self.beginRemoveRows(QtCore.QModelIndex(), row, row)
-        self.__music.pop(row)
+        self._music.pop(row)
         self.endRemoveRows()
 
     def populate(self):
@@ -43,25 +58,20 @@ class Music(QtCore.QObject):
         self.__path = path
         self.__mane = None
 
-    def __getPath(self):
+    @QtCore.pyqtProperty('QString')
+    def path(self):
         return self.__path
 
-    def __setPath(self, path):
+    @path.setter
+    def path(self, path):
         self.__path = path
 
-    def __getName(self):
+    @QtCore.pyqtProperty('QString')
+    def name(self):
         return self.__name
 
-    def __setName(self, name):
+    @name.setter
+    def name(self, name):
         self.__name = name
 
-    #changed = QtCore.Signal()
     changed = QtCore.pyqtSignal()
-
-    """
-    path = QtCore.Property(unicode, __getPath, __setPath, notify=changed)
-    name = QtCore.Property(unicode, __getName, __setName, notify=changed)
-    """
-
-    path = QtCore.pyqtProperty(unicode, __getPath, __setPath, notify=changed)
-    name = QtCore.pyqtProperty(unicode, __getName, __setName, notify=changed)

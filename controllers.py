@@ -1,5 +1,5 @@
 #from PySide import QtCore
-from PyQt4 import QtCore
+from PyQt5 import QtCore
 
 
 class Controller(QtCore.QObject):

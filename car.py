@@ -2,16 +2,16 @@
 
 import sys
 
-from PyQt4 import QtCore, QtGui, QtDeclarative
+from PyQt5 import QtCore, QtQuick, QtGui, QtQml, QtWidgets
 
 from controllers import Controller
 from models import MusicModel
 
 
-class CarView(QtDeclarative.QDeclarativeView):
+class CarView(QtQuick.QQuickView):
 
     def __init__(self, parent=None):
-        QtDeclarative.QDeclarativeView.__init__(self, parent)
+        QtQuick.QQuickView.__init__(self, parent)
 
         self.musicModel = MusicModel(self)
         self.musicModel.populate()
@@ -25,24 +25,23 @@ class CarView(QtDeclarative.QDeclarativeView):
 
         self.setSource(QtCore.QUrl('views/CarPc.qml'))
 
-        self.setResizeMode(QtDeclarative.QDeclarativeView.SizeRootObjectToView)
-        self.setWindowTitle('CarPc player')
+        self.setResizeMode(QtQuick.QQuickView.SizeRootObjectToView)
 
 
 def start():
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
 
-    locale = QtCore.QLocale.system()
-    translator = QtCore.QTranslator()
+    #locale = QtCore.QLocale.system()
+    #translator = QtCore.QTranslator()
 
-    i18n_file = 'CarPc_' + locale.name() + '.qm'
-    i18n_path = '/usr/share/carpc/views/i18n/'
+    #i18n_file = 'CarPc_' + locale.name() + '.qm'
+    #i18n_path = '/usr/share/carpc/views/i18n/'
 
-    if (translator.load(i18n_file, i18n_path)):
-        app.installTranslator(translator)
+    #if (translator.load(i18n_file, i18n_path)):
+    #    app.installTranslator(translator)
 
-    view = CarView()
+    view = CarView() 
     view.show()
     app.exec_()
 
