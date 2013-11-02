@@ -6,24 +6,27 @@ import QtMultimedia 5.0
 import QtQuick.Window 2.0
 
 Rectangle {
-    //title: qsTr("CarPc")
     width: 800
     height: 480
+
+    property int margin: 12
 
     MediaPlayer {
         id: player
         volume: (slider.value - slider.minimumValue) / (slider.maximumValue - slider.minimumValue)
     }
 
-    function play(source) {
-        player.source = source
+    function play(music) {
+        player.source = music 
         player.play()
     }
 
     FileDialog {
         id: fileDialog
+        title: "Select a folder to load music from"
+        selectFolder: true
         nameFilters: [ "Music files (*.mp3 *.wav *.ogg)" ]
-        onAccepted: play(fileUrl)
+        onAccepted: controller.load(folder)
     }
 
     Action {
@@ -109,6 +112,20 @@ Rectangle {
                 value: 0.5
                 width: 100
             }
+        }
+    }
+
+    Rectangle {
+        y: toolbar.height
+        width: parent.width
+        height: parent.height - toolbar.height
+        color: "lightsteelblue"
+        ListView {
+            width: parent.width
+            height: parent.height
+            clip: true
+            model: musicModel
+            delegate: Text {text: name }
         }
     }
 }

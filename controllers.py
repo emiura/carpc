@@ -1,38 +1,44 @@
-#from PySide import QtCore
+import os
+
 from PyQt5 import QtCore
 
 
 class Controller(QtCore.QObject):
 
-    def __init__(self, parent=None):
+    def __init__(self, parent):
         QtCore.QObject.__init__(self, parent=parent)
+        self.musicModel = parent.musicModel
 
-    #@QtCore.Slot()
     @QtCore.pyqtSlot()
     def play(self):
         print('Play')
 
-    #@QtCore.Slot()
     @QtCore.pyqtSlot()
     def pause(self):
         print('Pause')
 
-    #@QtCore.Slot()
     @QtCore.pyqtSlot()
     def rewind(self):
         print('Rewind')
 
-    #@QtCore.Slot()
     @QtCore.pyqtSlot()
     def forward(self):
         print('Forward')
 
-    #@QtCore.Slot()
     @QtCore.pyqtSlot()
     def shuffle(self):
         print('Shuffle')
 
-    #@QtCore.Slot()
     @QtCore.pyqtSlot()
     def repeat(self):
         print('Repeat')
+
+    @QtCore.pyqtSlot(str)
+    def load(self, folder):
+        print('Loading folder: {0}'.format(folder))
+        for path, directories, files in os.walk(folder.replace('file://', '')):
+            for f in files:
+                name, ext = os.path.splitext(f)
+                if ext in ['.mp3', '.wma', '.ogg', '.oga']:
+                    self.musicModel.add({'path': path, 'name': name})
+            break

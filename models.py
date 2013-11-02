@@ -1,4 +1,3 @@
-#from PySide import QtCore
 from PyQt5 import QtCore
 
 
@@ -11,10 +10,10 @@ class MusicModel(QtCore.QAbstractListModel):
 
     def __init__(self, parent):
         QtCore.QAbstractListModel.__init__(self, parent=parent)
-        self._music = []
+        self._musics = []
 
     def rowCount(self, parent=QtCore.QModelIndex()):
-        return len(self._music)
+        return len(self._musics)
 
     def data(self, index, role=QtCore.Qt.DisplayRole):
         try:
@@ -23,7 +22,7 @@ class MusicModel(QtCore.QAbstractListModel):
             return QVariant()
 
         if role == self.PathRole:
-            return music.pach
+            return music.path
 
         if role == self.NameRole:
             return music.name
@@ -34,29 +33,25 @@ class MusicModel(QtCore.QAbstractListModel):
         return self._roles
 
 
-    def add(self, musicDetails):
-        self.beginInsertRows(QtCore.QModelIndex(), len(self._music),
-                             len(self._music))
-        self._music.append(musicDetails)
+    def add(self, music):
+        self.beginInsertRows(QtCore.QModelIndex(), len(self._musics),
+                             len(self._musics))
+        m = Music(music['path'], music['name'], self)
+        self._musics.append(m)
         self.endInsertRows()
 
     def delete(self, musicName, row):
         self.beginRemoveRows(QtCore.QModelIndex(), row, row)
-        self._music.pop(row)
+        self._musics.pop(row)
         self.endRemoveRows()
-
-    def populate(self):
-        pass
-        #for user in interface.ListUsers():
-        #    self.__users.append(User(user, self))
 
 
 class Music(QtCore.QObject):
 
-    def __init__(self, path, parent):
+    def __init__(self, path, name, parent):
         QtCore.QObject.__init__(self, parent=parent)
         self.__path = path
-        self.__mane = None
+        self.__name = name
 
     @QtCore.pyqtProperty('QString')
     def path(self):
