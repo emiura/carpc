@@ -113,6 +113,35 @@ Rectangle {
                 width: 100
             }
         }
+	    }
+
+    Component {
+        id: playListDelegate
+
+        Rectangle {
+            width: parent.width
+            height: 32
+            color: ((index % 2 == 0) ? "#808080": "#999999")
+
+            Row {
+                spacing: 4
+                anchors.left: parent.left
+                anchors.leftMargin: 4
+
+                Text {
+                    text: name
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: "black"
+                }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                   play(path)
+                }
+            }
+        }
     }
 
     Rectangle {
@@ -125,7 +154,7 @@ Rectangle {
             height: parent.height
             clip: true
             model: musicModel
-            delegate: Text {text: name }
+            delegate: playListDelegate
         }
     }
 }
