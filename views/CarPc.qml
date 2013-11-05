@@ -6,6 +6,7 @@ import QtMultimedia 5.0
 import QtQuick.Window 2.0
 
 Rectangle {
+    id: window
     width: 800
     height: 480
 
@@ -13,7 +14,7 @@ Rectangle {
 
     MediaPlayer {
         id: player
-        volume: (slider.value - slider.minimumValue) / (slider.maximumValue - slider.minimumValue)
+        volume: 0.5 
     }
 
     function play(music) {
@@ -92,6 +93,127 @@ Rectangle {
         tooltip: "Shuffle music"
     }
 
+
+    Column {
+
+        /** Header ***********************************************************/
+        Rectangle {
+            id: header
+            width: 800
+            height: 160 
+            color: "red"
+
+            Row {
+                anchors.centerIn: parent
+                spacing: 12
+                CircleButton {
+                    mText: "Volume +"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: console.log("Button Plus clicked!")
+                    }
+                }
+                CircleButton {
+                    mText: "Mute"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: console.log("Button Mute clicked!")
+                    }
+                }
+                CircleButton {
+                    mText: "Volume -"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: console.log("Button Minus clicked!")
+                    }
+                }
+                CircleButton {
+                    mText: "Repeat"
+                    buttonSize: 72
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: console.log("Button Repeat clicked!")
+                    }
+                }
+                CircleButton {
+                    mText: "Random"
+                    buttonSize: 72
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: console.log("Button Random clicked!")
+                    }
+                }
+                CircleButton {
+                    mText: "USB"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: fileDialog.open()
+                    }
+                }
+                CircleButton {
+                    mText: "Exit"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: console.log("Button Exit clicked!")
+                    }
+                }
+            }
+        }
+     
+        /** Display **********************************************************/
+        Rectangle {
+            id: display 
+            width: 800
+            height: 160
+            color: "green"
+
+            Text {
+                id: displayText
+                anchors.centerIn: parent
+                text: "Not playing"
+                width: 96
+                font.bold: true
+                horizontalAlignment: Text.Center
+            }
+        }
+     
+        /** Footer ***********************************************************/
+        Rectangle {
+            id: footer 
+            width: 800
+            height: 160
+            color: "blue"
+
+            Row {
+                anchors.centerIn: parent
+                spacing: 12
+                CircleButton {
+                    mText: "Previous"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: console.log("Button Prevous clicked!")
+                    }
+                }
+                CircleButton {
+                    mText: "Random"
+                    buttonSize: 128
+                    MouseArea {
+                        anchors.fill: parent
+                        onPressed:  { player.play() }
+                    }
+                }
+                CircleButton {
+                    mText: "Next"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: console.log("Button Next clicked!")
+                    }
+                }
+            }
+        }
+    }
+
+    /**
     ToolBar {
         id: toolbar
         RowLayout {
@@ -113,7 +235,7 @@ Rectangle {
                 width: 100
             }
         }
-	    }
+    }
 
     Component {
         id: playListDelegate
@@ -157,4 +279,5 @@ Rectangle {
             delegate: playListDelegate
         }
     }
+    **/
 }
