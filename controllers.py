@@ -11,10 +11,10 @@ class Controller(QtCore.QObject):
 
     @QtCore.pyqtSlot(str)
     def load(self, folder):
-        print('Loading folder: {0}'.format(folder))
         for path, directories, files in os.walk(folder.replace('file://', '')):
             for f in files:
                 name, ext = os.path.splitext(f)
                 if ext in ['.mp3', '.wma', '.ogg', '.oga']:
-                    self.musicModel.add({'path': path, 'name': name})
+                    self.musicModel.add({'path': '{0}/{1}'.format(path, f),
+                                         'name': name})
             break
