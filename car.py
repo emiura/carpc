@@ -28,9 +28,9 @@ class CarView(QtQuick.QQuickView):
 def start():
 
     app = QtWidgets.QApplication(sys.argv)
-
     view = CarView() 
     view.show()
+    view.engine().quit.connect(app.quit) 
     app.exec_()
 
 

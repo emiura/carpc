@@ -17,4 +17,8 @@ class Controller(QtCore.QObject):
                 if ext in ['.mp3', '.wma', '.ogg', '.oga']:
                     self.musicModel.add({'path': '{0}/{1}'.format(path, f),
                                          'name': name})
-            break
+            #break
+
+    @QtCore.pyqtSlot()
+    def reset(self):
+       self.musicModel.reset()

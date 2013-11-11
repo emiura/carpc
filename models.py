@@ -45,6 +45,11 @@ class MusicModel(QtCore.QAbstractListModel):
         self._musics.pop(row)
         self.endRemoveRows()
 
+    def reset(self):
+        self.beginResetModel()
+        self._musics = []
+        self.endResetModel()
+
 
 class Music(QtCore.QObject):
 

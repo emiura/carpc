@@ -11,39 +11,113 @@ Rectangle {
     height: 480
 
     property int margin: 12
-    property real volume: 0.5
     property real tmpVolume: 0.0
+    property bool keepPlaying: false
+    property bool repeat: false
 
     MediaPlayer {
         id: player
-        volume: volume
+        volume: 0.5
+        onStatusChanged: {
+            if (status == MediaPlayer.EndOfMedia) {
+               console.log("EndOfMedia")
+               if (repeat == true) {
+                   console.log("Repeat true")
+                   player.play()
+                   return
+               }
+               if (keepPlaying == true) {
+                   console.log("keepPlaying true")
+                   nextMusic()
+               }
+            }
+        }
     }
 
-    function load(folder) {
-        controller.load(folder)
-        playList.currentIndex = 1
-        //console.log(playList.count)
-        //console.log(playList.currentItem.data.path)
+    function toggleRepeat() {
+        console.log("toggleRepeat()")
+        if (repeat == false) {
+            repeat = true
+            keepPlaying = false 
+            setDisplayText("Repeat ON")
+        } else {
+            repeat = false
+            keepPlaying = true
+            setDisplayText("Repeat OFF")
+        }
+    }
+
+    function setDisplayText(text) {
+        console.log("setDisplayText()")
+        displayText.text = text
+    }
+
+    function nextMusic() {
+        console.log("nextMusic()")
+        playList.currentIndex = playList.currentIndex + 1
+        console.log(playList.currentIndex)
         player.source = playList.currentItem.data.path
         player.play()
     }
 
-    function togglePlay() {
-        console.log(player.playbackState)
-        if (player.playbackState == 0) {
+    function previousMusic() {
+        console.log("previousMusic()")
+        console.log(playList.currentIndex)
+        if (playList.currentIndex == 0 ) {
+            console.log("No previous music.")
+        } else {
+            playList.currentIndex = playList.currentIndex - 1
+            player.source = playList.currentItem.data.path
             player.play()
         }
-        if (player.playbackState > 0) {
+    }
+
+    function volumeIncrease() {
+        // Check if get max of 1.0 and set a message
+        player.volume = player.volume + 0.1
+        setDisplayText("Volume " + player.volume * 100 + "%")
+    }
+
+    function volumeDecrease() {
+        // Check if get muted of 0.0 and set a message
+        player.volume = player.volume - 0.1
+        setDisplayText("Volume " + player.volume * 100 + "%")
+    }
+
+    function load(folder) {
+        console.log("load()")
+        controller.reset()
+        controller.load(folder)
+        playList.currentIndex = 0
+        setDisplayText("Loaded " + playList.count + " musics.")
+        player.source = playList.currentItem.data.path
+        keepPlaying = true
+        player.play()
+        togglePlayButton.mText = "Pause"
+    }
+
+    function togglePlay() {
+        console.log("togglePlay()")
+        if (player.playbackState == 1){
             player.pause()
+            togglePlayButton.mText = "Play"
+        }
+        else{
+            player.play()
+            keepPlaying = true
+            togglePlayButton.mText = "Pause"
         }
     }
 
     function mute() {
+        console.log("mute()")
         if (player.volume != 0) {
             tmpVolume = player.volume
             player.volume = 0.0
+            setDisplayText("MUTE")
         } else { 
             player.volume = tmpVolume
+            setDisplayText("Volume " + player.volume * 100 + "%")
         }
     }
 
@@ -55,6 +129,7 @@ Rectangle {
         onAccepted: load(folder) 
     }
 
+
     Column {
 
         /** Header ***********************************************************/
@@ -64,6 +139,7 @@ Rectangle {
             height: 160 
             color: "red"
 
+
             Row {
                 anchors.centerIn: parent
                 spacing: 12
@@ -71,7 +147,7 @@ Rectangle {
                     mText: "Volume +"
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: console.log("Button Plus clicked!")
+                        onClicked: volumeIncrease()
                     }
                 }
                 CircleButton {
@@ -85,7 +161,7 @@ Rectangle {
                     mText: "Volume -"
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: console.log("Button Minus clicked!")
+                        onClicked: volumeDecrease() 
                     }
                 }
                 CircleButton {
@@ -93,7 +169,7 @@ Rectangle {
                     buttonSize: 72
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: console.log("Button Repeat clicked!")
+                        onClicked: toggleRepeat()
                     }
                 }
                 CircleButton {
@@ -115,7 +191,49 @@ Rectangle {
                     mText: "Exit"
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: console.log("Button Exit clicked!")
+                        onClicked: closeDialog.visible = true
+                    }
+                }
+            }
+
+            Rectangle {
+                id: closeDialog 
+                width: 300
+                height: 150
+                visible: false
+                color: "orange"
+                border.color: "black" 
+                anchors.centerIn: parent
+
+                Column {
+                    anchors.centerIn: parent
+                    spacing: 24
+                    
+                    Text {
+                        text: "Did you really want to quit?"
+                        width: 150
+                        font.bold: true
+                        horizontalAlignment: Text.Center
+                    }
+
+                    Row {
+                        spacing: 6
+                        anchors.right: parent.right
+
+                        Button {
+                            text: "Yes"
+                            height: 27
+                            onClicked: {
+                                closeDialog.visible = false
+                                Qt.quit()
+                            }
+                        }
+
+                        Button {
+                            text: "Cancel"
+                            height: 27
+                            onClicked: closeDialog.visible = false
+                        }
                     }
                 }
             }
@@ -128,13 +246,25 @@ Rectangle {
             height: 160
             color: "green"
 
-            Text {
-                id: displayText
+            Column {
                 anchors.centerIn: parent
-                text: "Not playing"
-                width: 96
-                font.bold: true
-                horizontalAlignment: Text.Center
+
+                Text {
+                    id: displayText
+                    //anchors.centerIn: parent
+                    text: "Not playing"
+                    width: 96
+                    font.bold: true
+                    horizontalAlignment: Text.Center
+                }
+                Text {
+                    id: musicText
+                    //anchors.centerIn: parent
+                    text: "INFO"
+                    width: 96
+                    font.bold: true
+                    horizontalAlignment: Text.Center
+                }
             }
         }
      
@@ -152,10 +282,11 @@ Rectangle {
                     mText: "Previous"
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: console.log("Button Prevous clicked!")
+                        onClicked: previousMusic()
                     }
                 }
                 CircleButton {
+                    id: togglePlayButton
                     mText: "Play"
                     buttonSize: 128
                     MouseArea {
@@ -167,7 +298,7 @@ Rectangle {
                     mText: "Next"
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: console.log("Button Next clicked!")
+                        onClicked: nextMusic()
                     }
                 }
             }
