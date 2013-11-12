@@ -22,3 +22,10 @@ class Controller(QtCore.QObject):
     @QtCore.pyqtSlot()
     def reset(self):
        self.musicModel.reset()
+
+    @QtCore.pyqtSlot(str)
+    def add(self, music):
+        music = music.replace('file://', '')
+        path, f = os.path.split(music)
+        name, ext = os.path.splitext(f)
+        self.musicModel.add({'path': '{0}/{1}'.format(path, f), 'name': name})

@@ -4,6 +4,8 @@ import QtQuick.Dialogs 1.0
 import QtQuick.Layouts 1.0
 import QtMultimedia 5.0
 import QtQuick.Window 2.0
+import QtQuick.LocalStorage 2.0
+import "database.js" as Db
 
 Rectangle {
     id: window
@@ -15,10 +17,31 @@ Rectangle {
     property bool keepPlaying: false
     property bool repeat: false
 
+
+    Component.onCompleted: {
+        Db.initialize()
+        console.debug("INITIALIZED")
+        if (Db.getSetting("initialized") !== "true") {
+            // initialize settings
+            console.debug("reset settings")
+            Db.setSetting("initialized", "true")
+            Db.setSetting("volume", "0.5")
+            Db.setSetting("music", "false")
+        }
+        player.volume = Db.getSetting("volume")
+        if (Db.getSetting("music") !== "false") {
+            player.source = Db.getSetting("music")
+            controller.add(Db.getSetting("music"))
+            setDisplayText(Db.getSetting("music"))
+        }
+    }
+
     MediaPlayer {
         id: player
-        volume: 0.5
+        volume: 0.0
         onStatusChanged: {
+            Db.setSetting("volume", player.volume)
+            Db.setSetting("music", player.source)
             if (status == MediaPlayer.EndOfMedia) {
                console.log("EndOfMedia")
                if (repeat == true) {
@@ -31,6 +54,16 @@ Rectangle {
                    nextMusic()
                }
             }
+        }
+        onPositionChanged: {
+            musicText.text = Math.floor((player.position/1000) / 60).toString() + ":" + (
+                        Math.floor((player.position/1000) % 60)<10 ? "0"+Math.floor((player.position/1000) % 60).toString() :
+                                                          Math.floor((player.position/1000) % 60).toString())
+            musicText.text += " / "
+            musicText.text += Math.floor((player.duration/1000) / 60).toString() + ":" + (
+                        Math.floor((player.duration/1000) % 60)<10 ? "0"+Math.floor((player.duration/1000) % 60).toString() :
+                                                          Math.floor((player.duration/1000) % 60).toString())
+            setDisplayText(playList.currentItem.data.path)
         }
     }
 
@@ -257,10 +290,11 @@ Rectangle {
                     font.bold: true
                     horizontalAlignment: Text.Center
                 }
+
                 Text {
                     id: musicText
                     //anchors.centerIn: parent
-                    text: "INFO"
+                    text: ""
                     width: 96
                     font.bold: true
                     horizontalAlignment: Text.Center
