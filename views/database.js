@@ -1,6 +1,9 @@
+// return db
 function getDatabase() {
      return LocalStorage.openDatabaseSync("carpc", "1.0", "StorageDatabase", 1000000);
 }
+
+// init db
 function initialize() {
     var db = getDatabase();
     db.transaction(
@@ -8,6 +11,8 @@ function initialize() {
             tx.executeSql('CREATE TABLE IF NOT EXISTS settings(setting TEXT UNIQUE, value TEXT)');
       });
 }
+
+// insert
 function setSetting(setting, value) {
     var db = getDatabase();
     var res = "";
@@ -23,6 +28,8 @@ function setSetting(setting, value) {
   );
   return res;
 }
+
+// select
 function getSetting(setting) {
    var db = getDatabase();
    var res="";
