@@ -77,6 +77,7 @@ Item
     // select playlist
     function getPlaylist(playlist)
     {
+        console.debug("getplaylist");
         var db = openDataBase();
         var res = "";
         try
@@ -88,7 +89,9 @@ Item
                 {
                     for (var i = 0; i < rs.rows.length; i++)
                     {
-                        controller.add(rs.rows.item(i).path, rs.rows.item(i).name)
+                        console.debug("reading DB");
+                        console.debug("reading DB", rs.rows.item(i).path, rs.rows.item(i).name);
+                        controller.add(rs.rows.item(i).path , rs.rows.item(i).name)
                     }
                     res = "OK";
                 }

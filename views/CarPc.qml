@@ -37,6 +37,13 @@ Rectangle
         random = musicdb.getSetting("random")
         index = musicdb.getSetting("index")
         musicdb.getPlaylist(playList)
+        playList.currentIndex = index
+        setDisplayText("Loaded " + playList.count + " musics.")
+        player.source = playList.currentItem.data.path
+        keepPlaying = true
+        player.play()
+        togglePlayButton.mText = "Pause"
+
     }
 
     // save database
@@ -46,7 +53,7 @@ Rectangle
         musicdb.setSetting("volume", volume)
         musicdb.setSetting("repeat", repeat)
         musicdb.setSetting("random", random)
-        musicdb.setSetting("index", index)
+        musicdb.setSetting("index", playList.currentIndex)
         console.debug("debug",playList)
         musicdb.setPlaylist(playList)
     }
@@ -96,7 +103,7 @@ Math.floor((player.position/1000) % 60).toString())
 60).toString() + ":" + ( Math.floor((player.duration/1000) % 60)<10 ?
 "0"+Math.floor((player.duration/1000) % 60).toString() :
 Math.floor((player.duration/1000) % 60).toString())
-            setDisplayText(playList.currentItem.data.path)
+            setDisplayText(playList.currentItem.data.name)
         }
     }
 
