@@ -10,6 +10,7 @@ class Controller(QtCore.QObject):
         self.musicModel = parent.musicModel
 
     @QtCore.pyqtSlot(str)
+    # load musics from folder
     def load(self, folder):
         for path, directories, files in os.walk(folder.replace('file://', '')):
             for f in files:
@@ -20,10 +21,12 @@ class Controller(QtCore.QObject):
             #break
 
     @QtCore.pyqtSlot()
+    # reset music
     def reset(self):
        self.musicModel.reset()
 
     @QtCore.pyqtSlot(str)
+    # add music from db
     def add(self, music):
         music = music.replace('file://', '')
         path, f = os.path.split(music)

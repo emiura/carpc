@@ -12,9 +12,11 @@ class MusicModel(QtCore.QAbstractListModel):
         QtCore.QAbstractListModel.__init__(self, parent=parent)
         self._musics = []
 
+    # music time
     def rowCount(self, parent=QtCore.QModelIndex()):
         return len(self._musics)
 
+    # file name and path
     def data(self, index, role=QtCore.Qt.DisplayRole):
         try:
             music = self._musics[index.row()]
@@ -33,6 +35,7 @@ class MusicModel(QtCore.QAbstractListModel):
         return self._roles
 
 
+    # add music to list
     def add(self, music):
         self.beginInsertRows(QtCore.QModelIndex(), len(self._musics),
                              len(self._musics))
@@ -40,11 +43,13 @@ class MusicModel(QtCore.QAbstractListModel):
         self._musics.append(m)
         self.endInsertRows()
 
+    # delete music from list
     def delete(self, musicName, row):
         self.beginRemoveRows(QtCore.QModelIndex(), row, row)
         self._musics.pop(row)
         self.endRemoveRows()
 
+    # reset list
     def reset(self):
         self.beginResetModel()
         self._musics = []

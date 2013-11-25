@@ -17,6 +17,7 @@ Rectangle {
     property real tmpVolume: 0.0
     property bool keepPlaying: false
     property bool repeat: false
+    property bool random: false
 
     // start
     Component.onCompleted: {
@@ -55,6 +56,10 @@ Rectangle {
                    console.log("keepPlaying true")
                    nextMusic()
                }
+               if (random == true) {
+		             console.log("random true")
+                   player.shuffle
+	       }		
             }
         }
 
@@ -263,6 +268,7 @@ Rectangle {
                         onPressed: {
 			    console.log("Button Random clicked!")
 			    parent.color = "brown"
+		 	    random == true
 			}
 			onReleased: {
 			    parent.color = "white"
@@ -304,8 +310,8 @@ Rectangle {
             // exit dialog
             Rectangle {
                 id: closeDialog 
-                width: 300
-                height: 150
+                width: 500
+                height: 300
                 visible: false
                 color: "red"
                 border.color: "black" 
@@ -328,7 +334,7 @@ Rectangle {
 
                         Button {
                             text: "Yes"
-                            height: 27
+                            height: 80
                             onClicked: {
                                 closeDialog.visible = false
                                 Qt.quit()
@@ -337,7 +343,7 @@ Rectangle {
 
                         Button {
                             text: "Cancel"
-                            height: 27
+                            height: 80
                             onClicked: closeDialog.visible = false
                         }
                     }
@@ -351,6 +357,7 @@ Rectangle {
             width: 800
             height: 160
             color: "lightgray"
+	    anchors.horizontalCenter: parent.horizontalCenter
 
             Column {
                 anchors.centerIn: parent
