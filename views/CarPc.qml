@@ -8,7 +8,8 @@ import QtQuick.LocalStorage 2.0
 import "database.js" as Db
 
 // main
-Rectangle {
+Rectangle 
+{
     id: window
     width: 800
     height: 480
@@ -20,10 +21,12 @@ Rectangle {
     property bool random: false
 
     // start
-    Component.onCompleted: {
+    Component.onCompleted: 
+    {
         Db.initialize()
         console.debug("INITIALIZED")
-        if (Db.getSetting("initialized") !== "true") {
+        if (Db.getSetting("initialized") !== "true") 
+        {
             // initialize settings
             console.debug("reset settings")
             Db.setSetting("initialized", "true")
@@ -31,7 +34,8 @@ Rectangle {
             Db.setSetting("music", "false")
         }
         player.volume = Db.getSetting("volume")
-        if (Db.getSetting("music") !== "false") {
+        if (Db.getSetting("music") !== "false") 
+        {
             player.source = Db.getSetting("music")
             controller.add(Db.getSetting("music"))
             setDisplayText(Db.getSetting("music"))
@@ -39,51 +43,58 @@ Rectangle {
     }
    
     // new media player
-    MediaPlayer {
+    MediaPlayer 
+    {
         id: player
         volume: 0.0
-        onStatusChanged: {
+        onStatusChanged: 
+        {
             Db.setSetting("volume", player.volume)
             Db.setSetting("music", player.source)
-            if (status == MediaPlayer.EndOfMedia) {
-               console.log("EndOfMedia")
-               if (repeat == true) {
-                   console.log("Repeat true")
-                   player.play()
-                   return
-               }
-               if (keepPlaying == true) {
-                   console.log("keepPlaying true")
-                   nextMusic()
-               }
-               if (random == true) {
-		             console.log("random true")
-                   player.shuffle
-	       }		
+            if (status == MediaPlayer.EndOfMedia) 
+            {
+                console.log("EndOfMedia")
+                if (repeat == true) 
+                {
+                    console.log("Repeat true")
+                    player.play()
+                    return
+                }
+                if (keepPlaying == true) 
+                {
+                    console.log("keepPlaying true")
+                    nextMusic()
+                }
+                if (random == true) 
+                {
+		            console.log("random true")
+                    player.shuffle
+	            }		
             }
         }
 
- 	// updates timestamp
-        onPositionChanged: {
-            musicText.text = Math.floor((player.position/1000) / 60).toString() + ":" + (
-                        Math.floor((player.position/1000) % 60)<10 ? "0"+Math.floor((player.position/1000) % 60).toString() :
-                                                          Math.floor((player.position/1000) % 60).toString())
+ 	    // updates timestamp
+        onPositionChanged: 
+        {
+            musicText.text = Math.floor((player.position/1000) / 60).toString() + ":" + ( Math.floor((player.position/1000) % 60)<10 ? "0"+Math.floor((player.position/1000) % 60).toString() : Math.floor((player.position/1000) % 60).toString())
             musicText.text += " / "
-            musicText.text += Math.floor((player.duration/1000) / 60).toString() + ":" + (
-                        Math.floor((player.duration/1000) % 60)<10 ? "0"+Math.floor((player.duration/1000) % 60).toString() :
-                                                          Math.floor((player.duration/1000) % 60).toString())
+            musicText.text += Math.floor((player.duration/1000) / 60).toString() + ":" + ( Math.floor((player.duration/1000) % 60)<10 ? "0"+Math.floor((player.duration/1000) % 60).toString() : Math.floor((player.duration/1000) % 60).toString())
             setDisplayText(playList.currentItem.data.path)
         }
     }
 
     // repeat on/off
-    function toggleRepeat() {
+    function toggleRepeat() 
+    {
         console.log("toggleRepeat()")
-        if (repeat == false) {
+        if (repeat == false) 
+        {
             repeat = true
             keepPlaying = false 
             setDisplayText("Repeat ON")
-        } else {
+        } 
+        else 
+        {
             repeat = false
             keepPlaying = true
             setDisplayText("Repeat OFF")
@@ -91,13 +102,15 @@ Rectangle {
     }
 
     // show display
-    function setDisplayText(text) {
+    function setDisplayText(text) 
+    {
         console.log("setDisplayText()")
         displayText.text = text
     }
 
     // next
-    function nextMusic() {
+    function nextMusic() 
+    {
         console.log("nextMusic()")
         playList.currentIndex = playList.currentIndex + 1
         console.log(playList.currentIndex)
@@ -106,12 +119,16 @@ Rectangle {
     }
 
     // previous
-    function previousMusic() {
+    function previousMusic() 
+    {
         console.log("previousMusic()")
         console.log(playList.currentIndex)
-        if (playList.currentIndex == 0 ) {
+        if (playList.currentIndex == 0 ) 
+        {
             console.log("No previous music.")
-        } else {
+        } 
+        else 
+        {
             playList.currentIndex = playList.currentIndex - 1
             player.source = playList.currentItem.data.path
             player.play()
@@ -119,21 +136,24 @@ Rectangle {
     }
 
     // increase volume
-    function volumeIncrease() {
+    function volumeIncrease() 
+    {
         // Check if get max of 1.0 and set a message
         player.volume = player.volume + 0.1
         setDisplayText("Volume " + player.volume * 100 + "%")
     }
 
     // decrease volume
-    function volumeDecrease() {
+    function volumeDecrease() 
+    {
         // Check if get muted of 0.0 and set a message
         player.volume = player.volume - 0.1
         setDisplayText("Volume " + player.volume * 100 + "%")
     }
 
     // load files
-    function load(folder) {
+    function load(folder) 
+    {
         console.log("load()")
         controller.reset()
         controller.load(folder)
@@ -146,7 +166,8 @@ Rectangle {
     }
 
     // file load dialog window
-    FileDialog {
+    FileDialog 
+    {
         id: fileDialog
         title: "Select a folder to load music from"
         selectFolder: true
@@ -155,13 +176,16 @@ Rectangle {
     }
 
     // toggle play plause
-    function togglePlay() {
+    function togglePlay() 
+    {
         console.log("togglePlay()")
-        if (player.playbackState == 1){
+        if (player.playbackState == 1)
+        {
             player.pause()
             togglePlayButton.mText = "Play"
         }
-        else{
+        else 
+        {
             player.play()
             keepPlaying = true
             togglePlayButton.mText = "Pause"
@@ -171,11 +195,14 @@ Rectangle {
     // mute/unmute audio
     function mute() {
         console.log("mute()")
-        if (player.volume != 0) {
+        if (player.volume != 0) 
+        {
             tmpVolume = player.volume
             player.volume = 0.0
             setDisplayText("MUTE")
-        } else { 
+        } 
+        else 
+        { 
             player.volume = tmpVolume
             setDisplayText("Volume " + player.volume * 100 + "%")
         }
@@ -183,132 +210,165 @@ Rectangle {
 
 
     // main player
-    Column {
+    Column 
+    {
 
         /** Header ***********************************************************/
-        Rectangle {
+        Rectangle 
+        {
             id: header
             width: 800
             height: 160 
             color: "gray"
 
-	    // vol, mute, random, repeat, usb, exit
-            Row {
+	        // vol, mute, random, repeat, usb, exit
+            Row 
+            {
                 anchors.centerIn: parent
                 spacing: 12
 
                 // vol-
-                CircleButton {
+                CircleButton 
+                {
                     mText: "Volume -"
-                    MouseArea {
+                    MouseArea 
+                    {
                         anchors.fill: parent
-                        onPressed: {
-			    volumeDecrease() 
-			    parent.color = "brown" 
-			}
-			onReleased: {
-		            parent.color = "white"
-			}
+                        onPressed: 
+                        {
+			                  volumeDecrease() 
+			                  parent.color = "brown" 
+			            }
+			            onReleased: 
+                        {
+		                    parent.color = "white"
+			            }
 			
                     }
                 }
 
                 // mute
-                CircleButton {
+                CircleButton 
+                {
                     mText: "Mute"
-                    MouseArea {
+                    MouseArea 
+                    {
                         anchors.fill: parent
-                        onPressed: {
-			    mute()
-			    parent.color = "brown"
-			}
-			onReleased:{
-			    parent.color = "white"
-			}
+                        onPressed: 
+                        {
+			                mute()
+			                parent.color = "brown"
+			            }   
+			            onReleased:
+                        {
+			                parent.color = "white"
+			            }
                     }
                 }
 
                 // vol+
-                CircleButton {
+                CircleButton 
+                {
                     mText: "Volume +"
-                    MouseArea {
+                    MouseArea 
+                    {
                         anchors.fill: parent
-                        onPressed: {
-			    volumeIncrease() 
-			    parent.color = "brown" 
-			}
-			onReleased: {
-		            parent.color = "white"
-			}
+                        onPressed: 
+                        {
+			                volumeIncrease() 
+			                parent.color = "brown" 
+			            }
+			            onReleased: 
+                        {
+		                    parent.color = "white"
+			            }
                     }
                 }
  
                 // repeat
-                CircleButton {
+                CircleButton 
+                {
                     mText: "Repeat"
                     buttonSize: 72
-                    MouseArea {
+                    MouseArea 
+                    {
                         anchors.fill: parent
-                        onPressed: { 
-			    toggleRepeat()
-		            parent.color = "brown"
-			} 
-			onReleased: {
-		            parent.color = "white"
-			}
+                        onPressed: 
+                        { 
+			                toggleRepeat()
+		                    parent.color = "brown"
+			            } 
+			            onReleased: 
+                        {
+		                    parent.color = "white"
+			            }
                     }
                 }
 
                 // random
-                CircleButton {
+                CircleButton 
+                {
                     mText: "Random"
                     buttonSize: 72
-                    MouseArea {
+                    MouseArea 
+                    {
                         anchors.fill: parent
-                        onPressed: {
-			    console.log("Button Random clicked!")
-			    parent.color = "brown"
-		 	    random == true
-			}
-			onReleased: {
-			    parent.color = "white"
-			}
+                        onPressed: 
+                        {
+			                console.log("Button Random clicked!")
+			                parent.color = "brown"
+		 	                random == true
+			            }
+			            onReleased: 
+                        {
+			                parent.color = "white"
+			            }
                     }
                 }
 
 
-		// file load
-                CircleButton {
+		        // file load
+                CircleButton 
+                {
                     mText: "USB"
-                    MouseArea {
+                    MouseArea 
+                    {
                         anchors.fill: parent
-                        onPressed: {
-			    fileDialog.open()
-			}
-			onReleased: {
-			    parent.color = "white"
-			}
+                        onPressed: 
+                        {
+			                fileDialog.open()
+			            }
+			            onReleased: 
+                        {
+			                parent.color = "white"
+
+			            }
                     }
                 }
 
                 // quit
-                CircleButton {
+                CircleButton 
+                {
                     mText: "Exit"
-                    MouseArea {
+                    MouseArea 
+                    {
                         anchors.fill: parent
-                        onPressed: {
-			    parent.color = "brown"
-			}
-			onReleased: {
-			    closeDialog.visible = true
-			    parent.color = "white" 
-			}
+                        onPressed: 
+                        {
+			                parent.color = "brown"
+			            }
+			            onReleased: 
+                        {
+			                closeDialog.visible = true
+			                parent.color = "white" 
+			            }
                     }
                 }
             }
 
             // exit dialog
-            Rectangle {
+            Rectangle 
+            {
                 id: closeDialog 
                 width: 500
                 height: 300
@@ -317,31 +377,37 @@ Rectangle {
                 border.color: "black" 
                 anchors.centerIn: parent
 
-                Column {
+                Column 
+                {
                     anchors.centerIn: parent
                     spacing: 24
                     
-                    Text {
+                    Text 
+                    {
                         text: "Did you really want to quit?"
                         width: 150
                         font.bold: true
                         horizontalAlignment: Text.Center
                     }
 
-                    Row {
+                    Row 
+                    {
                         spacing: 6
                         anchors.right: parent.right
 
-                        Button {
+                        Button 
+                        {
                             text: "Yes"
                             height: 80
-                            onClicked: {
+                            onClicked: 
+                            {
                                 closeDialog.visible = false
                                 Qt.quit()
                             }
                         }
 
-                        Button {
+                        Button 
+                        {
                             text: "Cancel"
                             height: 80
                             onClicked: closeDialog.visible = false
@@ -352,28 +418,30 @@ Rectangle {
         }
      
         // status display 
-        Rectangle {
+        Rectangle 
+        {
             id: display 
             width: 800
             height: 160
             color: "lightgray"
-	    anchors.horizontalCenter: parent.horizontalCenter
+	        anchors.horizontalCenter: parent.horizontalCenter
 
-            Column {
+            Column 
+            {
                 anchors.centerIn: parent
 
-                Text {
+                Text 
+                {
                     id: displayText
-                    //anchors.centerIn: parent
                     text: "Not playing"
                     width: 96
                     font.bold: true
                     horizontalAlignment: Text.Center
                 }
 
-                Text {
+                Text 
+                {
                     id: musicText
-                    //anchors.centerIn: parent
                     text: ""
                     width: 96
                     font.bold: true
@@ -382,61 +450,75 @@ Rectangle {
             }
         }
      
-        Rectangle {
+        // rev/play/next
+        Rectangle 
+        {
             id: footer 
             width: 800
             height: 160
             color: "gray"
 
-            // rev/play/nextdd
-            Row {
+            Row 
+            {
                 anchors.centerIn: parent
                 spacing: 12
 			
-		// prev
-                CircleButton {
+		        // prev
+                CircleButton 
+                {
                     mText: "Previous"
-                    MouseArea {
+                    MouseArea 
+                    {
                         anchors.fill: parent
-                        onPressed: {
-			    previousMusic()
-		            parent.color = "brown"
-			}
-			onReleased: {
-			    parent.color = "white"
-			}
+                        onPressed: 
+                        {
+			                previousMusic()
+		                    parent.color = "brown"
+			            }
+			            onReleased: 
+                        {
+			                parent.color = "white"
+			            }
                     }
                 }
 
                 // play-pause
-                CircleButton {
+                CircleButton 
+                {
                     id: togglePlayButton
                     mText: "Play"
                     buttonSize: 128
-                    MouseArea {
+                    MouseArea 
+                    {
                         anchors.fill: parent
-                        onPressed: { 
-			    togglePlay()
-			    parent.color = "brown"
-			}
-			onReleased: {
-			    parent.color = "white"
-			}
+                        onPressed: 
+                        { 
+			                togglePlay()
+			                parent.color = "brown"
+			            }
+			            onReleased: 
+                        {
+			                parent.color = "white"
+			            }
                     }
                 }
 
                 // next
-                CircleButton {
+                CircleButton 
+                {
                     mText: "Next"
-                    MouseArea {
+                    MouseArea 
+                    {
                         anchors.fill: parent
-                        onPressed: {
-			    nextMusic()
-		            parent.color = "brown"
-			}
-			onReleased: {
-			    parent.color = "white"
-			}
+                        onPressed: 
+                        {
+			                nextMusic()
+		                    parent.color = "brown"
+			            }
+			            onReleased: 
+                        {
+			                parent.color = "white"
+			            }
 
                     }
                 }
@@ -445,11 +527,13 @@ Rectangle {
     }
 
     // playlist
-    ListView {
+    ListView 
+    {
         id: playList
         clip: true
         model: musicModel
-        delegate: Text {
+        delegate: Text 
+        {
            property variant data: model
            text: path
         }
