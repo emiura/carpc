@@ -49,6 +49,7 @@ Item
                     onClicked:
                     {
                         Qt.quit()
+                        controller.quitProgram()
                     }
                }
                Button

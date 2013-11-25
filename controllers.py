@@ -32,3 +32,8 @@ class Controller(QtCore.QObject):
         path, f = os.path.split(music)
         name, ext = os.path.splitext(f)
         self.musicModel.add({'path': '{0}/{1}'.format(path, f), 'name': name})
+
+    @QtCore.pyqtSlot()
+    def quitProgram(self):
+    #kill python
+        os.system("killall python")
