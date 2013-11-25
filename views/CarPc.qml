@@ -57,9 +57,9 @@ Rectangle
                 console.log("EndOfMedia")
                 if (random == true) 
                 {
-		            console.log("random true")
+                  console.log("random true")
                     player.shuffle
-  	            }		
+               }     
 
                 if (repeat == true) 
                 {
@@ -75,12 +75,18 @@ Rectangle
             }
         }
 
- 	    // updates timestamp
+       // updates timestamp
         onPositionChanged: 
         {
-            musicText.text = Math.floor((player.position/1000) / 60).toString() + ":" + ( Math.floor((player.position/1000) % 60)<10 ? "0"+Math.floor((player.position/1000) % 60).toString() : Math.floor((player.position/1000) % 60).toString())
+            musicText.text = Math.floor((player.position/1000) /
+60).toString() + ":" + ( Math.floor((player.position/1000) % 60)<10 ?
+"0"+Math.floor((player.position/1000) % 60).toString() :
+Math.floor((player.position/1000) % 60).toString())
             musicText.text += " / "
-            musicText.text += Math.floor((player.duration/1000) / 60).toString() + ":" + ( Math.floor((player.duration/1000) % 60)<10 ? "0"+Math.floor((player.duration/1000) % 60).toString() : Math.floor((player.duration/1000) % 60).toString())
+            musicText.text += Math.floor((player.duration/1000) /
+60).toString() + ":" + ( Math.floor((player.duration/1000) % 60)<10 ?
+"0"+Math.floor((player.duration/1000) % 60).toString() :
+Math.floor((player.duration/1000) % 60).toString())
             setDisplayText(playList.currentItem.data.path)
         }
     }
@@ -232,7 +238,8 @@ Rectangle
     Column 
     {
 
-        /** Header ***********************************************************/
+        /** Header
+ * ***********************************************************/
         Rectangle 
         {
             id: header
@@ -240,7 +247,7 @@ Rectangle
             height: 160 
             color: "gray"
 
-	        // vol, mute, random, repeat, usb, exit
+           // vol, mute, random, repeat, usb, exit
             Row 
             {
                 anchors.centerIn: parent
@@ -250,19 +257,20 @@ Rectangle
                 CircleButton 
                 {
                     mText: "Volume -"
+                    anchors.verticalCenter: parent.verticalCenter
                     MouseArea 
                     {
                         anchors.fill: parent
                         onPressed: 
                         {
-			                  volumeDecrease() 
-			                  parent.color = "brown" 
-			            }
-			            onReleased: 
+                           volumeDecrease() 
+                           parent.color = "brown" 
+                     }
+                     onReleased: 
                         {
-		                    parent.color = "white"
-			            }
-			
+                          parent.color = "white"
+                     }
+         
                     }
                 }
 
@@ -270,18 +278,19 @@ Rectangle
                 CircleButton 
                 {
                     mText: "Mute"
+                    anchors.verticalCenter: parent.verticalCenter
                     MouseArea 
                     {
                         anchors.fill: parent
                         onPressed: 
                         {
-			                mute()
-			                parent.color = "brown"
-			            }   
-			            onReleased:
+                         mute()
+                         parent.color = "brown"
+                     }   
+                     onReleased:
                         {
-			                parent.color = "white"
-			            }
+                         parent.color = "white"
+                     }
                     }
                 }
 
@@ -289,18 +298,19 @@ Rectangle
                 CircleButton 
                 {
                     mText: "Volume +"
+                    anchors.verticalCenter: parent.verticalCenter
                     MouseArea 
                     {
                         anchors.fill: parent
                         onPressed: 
                         {
-			                volumeIncrease() 
-			                parent.color = "brown" 
-			            }
-			            onReleased: 
+                         volumeIncrease() 
+                         parent.color = "brown" 
+                     }
+                     onReleased: 
                         {
-		                    parent.color = "white"
-			            }
+                          parent.color = "white"
+                     }
                     }
                 }
  
@@ -309,18 +319,19 @@ Rectangle
                 {
                     mText: "Repeat"
                     buttonSize: 72
+                    anchors.verticalCenter: parent.verticalCenter
                     MouseArea 
                     {
                         anchors.fill: parent
                         onPressed: 
                         { 
-			                  toggleRepeat()
-		                     parent.color = "brown"
-			               } 
-			               onReleased: 
+                           toggleRepeat()
+                           parent.color = "brown"
+                        } 
+                        onReleased: 
                         {
-		                     parent.color = "white"
-			               }
+                           parent.color = "white"
+                        }
                     }
                 }
 
@@ -329,37 +340,39 @@ Rectangle
                 {
                     mText: "Random"
                     buttonSize: 72
+                    anchors.verticalCenter: parent.verticalCenter
                     MouseArea 
                     {
                         anchors.fill: parent
                         onPressed: 
                         {
                            toggleRandom()
-			                  parent.color = "brown"
-			               }
-			               onReleased: 
+                           parent.color = "brown"
+                        }
+                        onReleased: 
                         {
-			                  parent.color = "white"
-			               }
+                           parent.color = "white"
+                        }
                     }
                 }
 
 
-		        // file load
+              // file load
                 CircleButton 
                 {
                     mText: "USB"
+                    anchors.verticalCenter: parent.verticalCenter
                     MouseArea 
                     {
                         anchors.fill: parent
                         onPressed: 
                         {
-			                  fileDialog.open()
-			               }
-			               onReleased: 
+                           fileDialog.open()
+                        }
+                        onReleased: 
                         {
-			                  parent.color = "white"
-			               }
+                           parent.color = "white"
+                        }
                     }
                 }
 
@@ -367,67 +380,18 @@ Rectangle
                 CircleButton 
                 {
                     mText: "Exit"
+                    anchors.verticalCenter: parent.verticalCenter
                     MouseArea 
                     {
                         anchors.fill: parent
                         onPressed: 
                         {
-			                  parent.color = "brown"
-			               }
-			               onReleased: 
-                        {
-			                  closeDialog.visible = true
-			                  parent.color = "white" 
-			               }
-                    }
-                }
-            }
-
-            // exit dialog
-            Rectangle 
-            {
-                id: closeDialog 
-                width: 500
-                height: 300
-                visible: false
-                color: "red"
-                border.color: "black" 
-                anchors.centerIn: parent
-
-                Column 
-                {
-                    anchors.centerIn: parent
-                    spacing: 24
-                    
-                    Text 
-                    {
-                        text: "Did you really want to quit?"
-                        width: 150
-                        font.bold: true
-                        horizontalAlignment: Text.Center
-                    }
-
-                    Row 
-                    {
-                        spacing: 6
-                        anchors.right: parent.right
-
-                        Button 
-                        {
-                            text: "Yes"
-                            height: 80
-                            onClicked: 
-                            {
-                                closeDialog.visible = false
-                                Qt.quit()
-                            }
+                           parent.color = "brown"
                         }
-
-                        Button 
+                        onReleased: 
                         {
-                            text: "Cancel"
-                            height: 80
-                            onClicked: closeDialog.visible = false
+                           Qt.createComponent("Dialog.qml").createObject(window,{});
+                           parent.color = "white" 
                         }
                     }
                 }
@@ -441,7 +405,7 @@ Rectangle
             width: 800
             height: 160
             color: "lightgray"
-	        anchors.horizontalCenter: parent.horizontalCenter
+           anchors.horizontalCenter: parent.horizontalCenter
 
             Column 
             {
@@ -473,7 +437,7 @@ Rectangle
                id: slider
 
                anchors.bottom: parent.bottom
-	            anchors.horizontalCenter: parent.horizontalCenter
+               anchors.horizontalCenter: parent.horizontalCenter
                width: parent.width - 100
                maximumValue: player.duration
                stepSize: 1000
@@ -509,23 +473,24 @@ Rectangle
             {
                 anchors.centerIn: parent
                 spacing: 12
-			
-		        // prev
+         
+              // prev
                 CircleButton 
                 {
                     mText: "Previous"
+                    anchors.verticalCenter: parent.verticalCenter
                     MouseArea 
                     {
                         anchors.fill: parent
                         onPressed: 
                         {
-			                previousMusic()
-		                    parent.color = "brown"
-			            }
-			            onReleased: 
+                         previousMusic()
+                          parent.color = "brown"
+                     }
+                     onReleased: 
                         {
-			                parent.color = "white"
-			            }
+                         parent.color = "white"
+                     }
                     }
                 }
 
@@ -534,19 +499,20 @@ Rectangle
                 {
                     id: togglePlayButton
                     mText: "Play"
+                    anchors.verticalCenter: parent.verticalCenter
                     buttonSize: 128
                     MouseArea 
                     {
                         anchors.fill: parent
                         onPressed: 
                         { 
-			                togglePlay()
-			                parent.color = "brown"
-			            }
-			            onReleased: 
+                         togglePlay()
+                         parent.color = "brown"
+                     }
+                     onReleased: 
                         {
-			                parent.color = "white"
-			            }
+                         parent.color = "white"
+                     }
                     }
                 }
 
@@ -554,18 +520,19 @@ Rectangle
                 CircleButton 
                 {
                     mText: "Next"
+                    anchors.verticalCenter: parent.verticalCenter
                     MouseArea 
                     {
                         anchors.fill: parent
                         onPressed: 
                         {
-			                nextMusic()
-		                    parent.color = "brown"
-			            }
-			            onReleased: 
+                         nextMusic()
+                          parent.color = "brown"
+                     }
+                     onReleased: 
                         {
-			                parent.color = "white"
-			            }
+                         parent.color = "white"
+                     }
 
                     }
                 }
