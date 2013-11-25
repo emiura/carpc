@@ -47,6 +47,7 @@ Rectangle
     {
         id: player
         volume: 0.0
+        
         onStatusChanged: 
         {
             Db.setSetting("volume", player.volume)
@@ -54,6 +55,12 @@ Rectangle
             if (status == MediaPlayer.EndOfMedia) 
             {
                 console.log("EndOfMedia")
+                if (random == true) 
+                {
+		            console.log("random true")
+                    player.shuffle
+  	            }		
+
                 if (repeat == true) 
                 {
                     console.log("Repeat true")
@@ -65,11 +72,6 @@ Rectangle
                     console.log("keepPlaying true")
                     nextMusic()
                 }
-                if (random == true) 
-                {
-		            console.log("random true")
-                    player.shuffle
-	            }		
             }
         }
 
@@ -100,6 +102,23 @@ Rectangle
             setDisplayText("Repeat OFF")
         }
     }
+
+    // random on/off
+    function toggleRandom() 
+    {
+        console.log("toggleRandom()")
+        if (random == false) 
+        {
+            random = true
+            setDisplayText("Random ON")
+        } 
+        else 
+        {
+            random = false
+            setDisplayText("Random OFF")
+        }
+    }
+
 
     // show display
     function setDisplayText(text) 
@@ -295,13 +314,13 @@ Rectangle
                         anchors.fill: parent
                         onPressed: 
                         { 
-			                toggleRepeat()
-		                    parent.color = "brown"
-			            } 
-			            onReleased: 
+			                  toggleRepeat()
+		                     parent.color = "brown"
+			               } 
+			               onReleased: 
                         {
-		                    parent.color = "white"
-			            }
+		                     parent.color = "white"
+			               }
                     }
                 }
 
@@ -315,14 +334,13 @@ Rectangle
                         anchors.fill: parent
                         onPressed: 
                         {
-			                console.log("Button Random clicked!")
-			                parent.color = "brown"
-		 	                random == true
-			            }
-			            onReleased: 
+                           toggleRandom()
+			                  parent.color = "brown"
+			               }
+			               onReleased: 
                         {
-			                parent.color = "white"
-			            }
+			                  parent.color = "white"
+			               }
                     }
                 }
 
@@ -336,13 +354,12 @@ Rectangle
                         anchors.fill: parent
                         onPressed: 
                         {
-			                fileDialog.open()
-			            }
-			            onReleased: 
+			                  fileDialog.open()
+			               }
+			               onReleased: 
                         {
-			                parent.color = "white"
-
-			            }
+			                  parent.color = "white"
+			               }
                     }
                 }
 
@@ -355,13 +372,13 @@ Rectangle
                         anchors.fill: parent
                         onPressed: 
                         {
-			                parent.color = "brown"
-			            }
-			            onReleased: 
+			                  parent.color = "brown"
+			               }
+			               onReleased: 
                         {
-			                closeDialog.visible = true
-			                parent.color = "white" 
-			            }
+			                  closeDialog.visible = true
+			                  parent.color = "white" 
+			               }
                     }
                 }
             }
@@ -435,6 +452,7 @@ Rectangle
                     id: displayText
                     text: "Not playing"
                     width: 96
+                    font.pointSize: 18
                     font.bold: true
                     horizontalAlignment: Text.Center
                 }
@@ -444,10 +462,39 @@ Rectangle
                     id: musicText
                     text: ""
                     width: 96
+                    font.pointSize: 48
                     font.bold: true
                     horizontalAlignment: Text.Center
                 }
             }
+
+            Slider 
+            {
+               id: slider
+
+               anchors.bottom: parent.bottom
+	            anchors.horizontalCenter: parent.horizontalCenter
+               width: parent.width - 100
+               maximumValue: player.duration
+               stepSize: 1000
+
+               onPressedChanged: 
+               {
+                  if (!pressed)
+                  {
+                     player.seek(value)
+                  }
+               }
+
+               Binding 
+               {
+                  target: slider
+                  property: "value"
+                  value: player.position
+                  when: !slider.pressed
+               }
+            }
+
         }
      
         // rev/play/next
