@@ -31,17 +31,6 @@ Rectangle
     Component.onCompleted: 
     {
         musicdb.initialize()
-        if (musicdb.getSetting("initialized") !== "true") 
-        {
-            // initialize settings
-            console.debug("reset settings")
-            musicdb.setSetting("initialized", "true")
-            musicdb.setSetting("volume", "0.5")
-            musicdb.setSetting("repeat", "false")
-            musicdb.setSetting("random", "false")
-            musicdb.setSetting("index", "0")
-        }
-
         // load from db
         player.volume = musicdb.getSetting("volume")
         repeat = musicdb.getSetting("repeat")

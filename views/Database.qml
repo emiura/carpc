@@ -47,16 +47,19 @@ Item
     }
 
     // insert playlist
-    function setPlaylist(playlist, count)
+    function setPlaylist(playlist)
     {
         var db = openDataBase();
         var res = "";
+        var count = 0;
+        playlist.currentIndex = 0;
         db.transaction(function(tx)
         {
             var rs = tx.executeSql("DELETE FROM playlist;")
-            for (var i = 0; i < count; i++)
+            for (var i = 0; i < playlist.count; i++)
             {
-                rs = tx.executeSql("INSERT INTO playlist VALUES (?,?);", [path, name]);
+                rs = tx.executeSql("INSERT INTO playlist VALUES (?,?);", [playlist.currentItem.data.path, playlist.currentItem.data.name]);
+                playlist.currentIndex += 1;
                 count += rs.rowsAffected;
             }
             if (count > 0)
