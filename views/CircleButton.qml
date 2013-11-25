@@ -1,7 +1,8 @@
 import QtQuick 2.1
 
 // actually, circle ...
-Rectangle {
+Rectangle 
+{
     width: buttonSize
     height: buttonSize
     radius: buttonSize / 2
@@ -9,19 +10,23 @@ Rectangle {
     property var mText: "Button"
     property var buttonSize: 96
 
-    Text {
+    Text 
+    {
         anchors.centerIn: parent
         text: mText 
         font.bold: true
     }
 
-    MouseArea {
+    MouseArea 
+    {
         anchors.fill: parent
-        onPressed: {
-	    console.log("Button clicked!")
-	}
-	onReleased: {
-	    parent.color = "white"
-	}
+        onPressed: 
+        {
+	        console.log("Button clicked!")
+	    }
+	    onReleased: 
+        {
+	        parent.color = "white"
+	    }
     }
 }

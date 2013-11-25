@@ -63,18 +63,22 @@ class Music(QtCore.QObject):
         self.__path = path
         self.__name = name
 
+    # get  
     @QtCore.pyqtProperty('QString')
     def path(self):
         return self.__path
 
+    # set
     @path.setter
     def path(self, path):
         self.__path = path
 
+    # get
     @QtCore.pyqtProperty('QString')
     def name(self):
         return self.__name
 
+    # set
     @name.setter
     def name(self, name):
         self.__name = name

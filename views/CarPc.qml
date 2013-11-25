@@ -4,8 +4,6 @@ import QtQuick.Dialogs 1.0
 import QtQuick.Layouts 1.0
 import QtMultimedia 5.0
 import QtQuick.Window 2.0
-import QtQuick.LocalStorage 2.0
-import "database.js" as Db
 
 // main
 Rectangle 
@@ -19,29 +17,51 @@ Rectangle
     property bool keepPlaying: false
     property bool repeat: false
     property bool random: false
+    property int index: 0
+    property real volume: 0.0
+
+    Database
+    {
+        id: musicdb
+        width: 800
+        height: 480
+    }   
 
     // start
     Component.onCompleted: 
     {
-        Db.initialize()
-        console.debug("INITIALIZED")
-        if (Db.getSetting("initialized") !== "true") 
+        musicdb.initialize()
+        if (musicdb.getSetting("initialized") !== "true") 
         {
             // initialize settings
             console.debug("reset settings")
-            Db.setSetting("initialized", "true")
-            Db.setSetting("volume", "0.5")
-            Db.setSetting("music", "false")
+            musicdb.setSetting("initialized", "true")
+            musicdb.setSetting("volume", "0.5")
+            musicdb.setSetting("repeat", "false")
+            musicdb.setSetting("random", "false")
+            musicdb.setSetting("index", "0")
         }
-        player.volume = Db.getSetting("volume")
-        if (Db.getSetting("music") !== "false") 
-        {
-            player.source = Db.getSetting("music")
-            controller.add(Db.getSetting("music"))
-            setDisplayText(Db.getSetting("music"))
-        }
+
+        // load from db
+        player.volume = musicdb.getSetting("volume")
+        repeat = musicdb.getSetting("repeat")
+        random = musicdb.getSetting("random")
+        index = musicdb.getSetting("index")
+        musicdb.getPlaylist(playList)
     }
-   
+
+    // save database
+    function save_all()
+    {
+        volume = player.volume
+        musicdb.setSetting("volume", volume)
+        musicdb.setSetting("repeat", repeat)
+        musicdb.setSetting("random", random)
+        musicdb.setSetting("index", index)
+        console.debug("debug",playList)
+        musicdb.setPlaylist(playList)
+    }
+
     // new media player
     MediaPlayer 
     {
@@ -50,8 +70,8 @@ Rectangle
         
         onStatusChanged: 
         {
-            Db.setSetting("volume", player.volume)
-            Db.setSetting("music", player.source)
+            musicdb.setSetting("volume", player.volume)
+            musicdb.setSetting("music", player.source)
             if (status == MediaPlayer.EndOfMedia) 
             {
                 console.log("EndOfMedia")
@@ -390,6 +410,7 @@ Math.floor((player.duration/1000) % 60).toString())
                         }
                         onReleased: 
                         {
+                           save_all()
                            Qt.createComponent("Dialog.qml").createObject(window,{});
                            parent.color = "white" 
                         }
