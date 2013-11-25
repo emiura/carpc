@@ -88,10 +88,7 @@ Item
                 {
                     for (var i = 0; i < rs.rows.length; i++)
                     {
-                        playlist.add(
-                        {
-                            "path": rs.rows.item(i).path, "name": rs.rows.item(i).name
-                        })
+                        controller.add(rs.rows.item(i).path, rs.rows.item(i).name)
                     }
                     res = "OK";
                 }

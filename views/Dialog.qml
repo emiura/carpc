@@ -29,23 +29,25 @@ Item
         anchors.centerIn: parent
         Column
         { 
-    
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             Text 
             {
-                anchors.centerIn: parent
                 text: "Do you really want to quit?"
                 font.pointSize: 18
-                horizontalAlignment: Text.center
+                width: 800
+                height: 50
+                horizontalAlignment: Text.AlignHCenter
             }
             
             Row
             {
+                spacing: 10
                 Button
                 {
                     text: "Yes"
-                    height: 80
+                    width: 80
+                    height: 40
                     onClicked:
                     {
                         Qt.quit()
@@ -55,7 +57,8 @@ Item
                Button
                {
                     text: "No"
-                    height: 80
+                    width: 80
+                    height: 40
                     onClicked:
                     {
                         dialogComponent.destroy()
