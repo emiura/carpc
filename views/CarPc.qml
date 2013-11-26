@@ -74,7 +74,7 @@ Rectangle
                 if (random == true) 
                 {
                   console.log("random true")
-                    player.shuffle
+                  shuffle(playList)
                }     
 
                 if (repeat == true) 
@@ -95,7 +95,7 @@ Rectangle
         onPositionChanged: 
         {
             musicText.text = Math.floor((player.position/1000) /
-60).toString() + ":" + ( Math.floor((player.position/1000) % 60)<10 ?
+60).toString() + ":" + (Math.floor((player.position/1000) % 60)<10 ?
 "0"+Math.floor((player.position/1000) % 60).toString() :
 Math.floor((player.position/1000) % 60).toString())
             musicText.text += " / "
@@ -362,7 +362,9 @@ Math.floor((player.duration/1000) % 60).toString())
                         anchors.fill: parent
                         onPressed: 
                         {
-                           toggleRandom()
+                           //toggleRandom()
+                           console.debug("Shuffled")
+                           shuffle(playList)
                            parent.color = "brown"
                         }
                         onReleased: 
@@ -569,4 +571,54 @@ Math.floor((player.duration/1000) % 60).toString())
            text: path
         }
     }
+
+    // shuffled
+    ListView 
+    {
+        id: shuffledList
+        clip: true
+        model: musicModel
+        delegate: Text 
+        {
+           property variant data: model
+           text: path
+        }
+    }
+
+    function shuffle(playlist)
+    {
+        var i
+        var j
+        var temppath
+        var tempdata
+        var temppath2
+        var tempdata2
+    
+        for(i = 0; i < playlist.count; i++)
+        {
+            j = Math.floor(Math.random()*(1+i))
+            if (j != i)
+            {
+                playlist.currentIndex = i
+                console.debug("i", i)
+                temppath = playlist.currentItem.data.path
+                console.debug("temppath", temppath)
+                tempdata = playlist.currentItem.data.name
+                console.debug("tempdata", tempdata)
+                playlist.currentIndex = j
+                temppath2 = playlist.currentItem.data.path
+                console.debug("temppath2", temppath2)
+                tempdata2 = playlist.currentItem.data.name
+                console.debug("tempdata2", tempdata2)
+                playlist.currentIndex = i
+                controller.add(temppath2, tempdata2)
+                playlist.currentIndex = j 
+                controller.add(temppath, tempdata)
+                console.debug("playlistcount", playlist.count)
+            }
+        }
+    }
+
+
+
 }
