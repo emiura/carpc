@@ -363,7 +363,7 @@ Math.floor((player.duration/1000) % 60).toString())
                         {
                            //toggleRandom()
                            console.debug("Shuffled")
-                           //shuffle(playList)
+                           shuffle(playList)
                            parent.color = "brown"
                         }
                         onReleased: 
@@ -581,15 +581,15 @@ Math.floor((player.duration/1000) % 60).toString())
         var tempdata2
     
         for(i = 0; i < playlist.count; i++)
+        {
             j = Math.floor(Math.random()*(1+i))
             if (j != i)
             {
                 playlist.currentIndex = i
                 console.debug("i", i)
+                console.debug("Current item", playlist.currentItem.data.path)
                 temppath = playlist.currentItem.data.path
-                console.debug("bla", temppath)
                 tempdata = playlist.currentItem.data.name
-                console.log("eu")
                 playlist.currentIndex = j
                 console.log("j", j)
                 temppath2 = playlist.currentItem.data.path
@@ -606,4 +606,5 @@ Math.floor((player.duration/1000) % 60).toString())
                 console.debug("playlist.currentItem.data.name2", playlist.currentItem.data.name)
             }
         }
+   }
 }

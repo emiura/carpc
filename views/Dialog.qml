@@ -43,27 +43,27 @@ Item
             Row
             {
                 spacing: 10
-                Button
-                {
-                    text: "Yes"
-                    width: 80
-                    height: 40
-                    onClicked:
+                    Button
                     {
-                        Qt.quit()
-                        controller.quitProgram()
+                        text: "Yes"
+                        width: 80
+                        height: 40
+                        onClicked:
+                        {
+                            Qt.quit()
+                            controller.quitProgram()
+                        }
                     }
-               }
-               Button
-               {
-                    text: "No"
-                    width: 80
-                    height: 40
-                    onClicked:
-                    {
-                        dialogComponent.destroy()
+                    Button
+                    {  
+                        text: "No"
+                        width: 80
+                        height: 40
+                        onClicked:
+                        {
+                            dialogComponent.destroy()
+                        }
                     }
-                }
             }
         }
     }
